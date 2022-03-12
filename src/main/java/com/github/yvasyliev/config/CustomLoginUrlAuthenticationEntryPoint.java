@@ -1,15 +1,18 @@
 package com.github.yvasyliev.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.UrlUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Service
 public class CustomLoginUrlAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
-    public CustomLoginUrlAuthenticationEntryPoint(String loginFormUrl) {
+    public CustomLoginUrlAuthenticationEntryPoint(@Value("/login") String loginFormUrl) {
         super(loginFormUrl);
     }
 

@@ -11,7 +11,7 @@ insert into users (
     enabled
 )
 values (
-    1,
+    nextval('hibernate_sequence'),
     'admin',
     'admin@gmail.com',
     'Admin_firstName',

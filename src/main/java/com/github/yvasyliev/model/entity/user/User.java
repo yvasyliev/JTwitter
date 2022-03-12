@@ -1,7 +1,6 @@
 package com.github.yvasyliev.model.entity.user;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
@@ -9,12 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Entity
 @Table(name = "users")
@@ -73,12 +73,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = role.getPermissions()
-                .stream()
-                .map(Permission::getGrantedAuthority)
-                .collect(Collectors.toSet());
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
-        return authorities;
+        return Collections.singleton(getRole());
     }
 
     @Override

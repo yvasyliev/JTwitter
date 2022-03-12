@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin" method="post" th:action="'login' + (${param.redirect_to}? '?redirect_to=' + ${param.redirect_to} : '')">
+    <form class="form-signin" method="post" action="'login' + (${param.redirect_to}? '?redirect_to=' + ${param.redirect_to} : '')">
         <h2 class="form-signin-heading">Please sign in</h2>
         <p>
             <label for="username" class="sr-only">Username or email</label>
