@@ -1,6 +1,5 @@
 package com.github.yvasyliev.service;
 
-import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -36,15 +34,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        String token = UUID.randomUUID().toString();
-
-        ConfirmationToken confirmationToken = new ConfirmationToken();
-        confirmationToken.setToken(token);
-        confirmationToken.setUser(user);
-
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        return token;
+        return confirmationTokenService.createConfirmationToken(user);
     }
 
     @Transactional

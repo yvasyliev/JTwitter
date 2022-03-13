@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
-@Table(name = "confirmation_token")
+@Table(name = "confirmation_tokens")
 public class ConfirmationToken {
     @Id
     @GeneratedValue
