@@ -44,22 +44,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout").not().fullyAuthenticated()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin(fromLogin -> {
-                    fromLogin.successForwardUrl("/");
-                    fromLogin.loginProcessingUrl("/login");
-                    fromLogin.successHandler(authenticationSuccessHandler);
-                })
-                .logout(logout -> {
-                    logout.logoutSuccessHandler((request, response, authentication) -> System.out.println("logout"));
-                    logout.clearAuthentication(true);
-                    logout.logoutUrl("/logout");
-                    logout.invalidateHttpSession(true);
-                    logout.deleteCookies("JSESSIONID");
-                    logout.logoutSuccessUrl("/");
-                })
-                .exceptionHandling(exceptionHandling -> {
-                    exceptionHandling.authenticationEntryPoint(authenticationEntryPoint);
-                });
+                .formLogin(fromLogin -> fromLogin
+                        .loginProcessingUrl("/login")
+                        .successForwardUrl("/")
+                        .successHandler(authenticationSuccessHandler))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID"))
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint));
     }
 
     @Override

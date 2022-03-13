@@ -1,6 +1,7 @@
 package com.github.yvasyliev.service;
 
 import com.github.yvasyliev.model.entity.ConfirmationToken;
+import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.model.dto.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class RegistrationService {
         user.setFirstName(registrationForm.getFirstName());
         user.setLastName(registrationForm.getLastName());
         user.setPassword(registrationForm.getPassword());
+        user.setRole(Role.UNCONFIRMED_USER);
 
         return userDetailsService.signUp(user);
     }
