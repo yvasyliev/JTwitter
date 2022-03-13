@@ -1,16 +1,16 @@
-package com.github.yvasyliev.config;
+package com.github.yvasyliev.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Service
+@Component
 public class CustomForwardAuthenticationSuccessHandler extends ForwardAuthenticationSuccessHandler {
     public CustomForwardAuthenticationSuccessHandler(@Value("/") String forwardUrl) {
         super(forwardUrl);
