@@ -44,14 +44,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/js/**",
                         "/registration/complete"
                 ).permitAll()
-                .antMatchers("/login",
+                .antMatchers(
+                        "/login",
                         "/logout",
                         "/registration"
                 ).not().fullyAuthenticated()
                 .and()
                 .formLogin(fromLogin -> fromLogin
                         .loginProcessingUrl("/login")
-                        .successForwardUrl("/")
+                        //.successForwardUrl("/")
                         .successHandler(authenticationSuccessHandler))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -78,10 +79,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public RequestMatcher logoutRequestMatcher() {
-        return new AntPathRequestMatcher("/logout", "GET");
     }
 }

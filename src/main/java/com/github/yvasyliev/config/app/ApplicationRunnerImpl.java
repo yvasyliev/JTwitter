@@ -51,7 +51,6 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         user.setLastName(lastName);
         user.setRole(role);
         user.setCreatedAt(LocalDateTime.now());
-        user.setEmailConfirmed(true);
         return user;
     }
 }
