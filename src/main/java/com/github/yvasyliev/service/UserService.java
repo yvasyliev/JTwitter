@@ -1,5 +1,7 @@
 package com.github.yvasyliev.service;
 
+import com.github.yvasyliev.model.entity.ConfirmationToken;
+import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class UserService {
     private ConfirmationTokenService confirmationTokenService;
 
     @Transactional
-    public String signUp(User user) {
+    public ConfirmationToken register(User user) {
         boolean userExists = userRepository.findByUsername(user.getUsername()).isPresent();
 
         if (userExists) {
@@ -38,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public void enableUser(User User) {
-        User.setEnabled(true);
+    public void confirmUser(User User) {
+        User.setRole(Role.USER);
     }
 }

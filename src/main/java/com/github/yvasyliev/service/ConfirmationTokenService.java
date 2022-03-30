@@ -14,23 +14,19 @@ public class ConfirmationTokenService {
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
-    public void saveConfirmationToken(ConfirmationToken confirmationToken) {
-        confirmationTokenRepository.save(confirmationToken);
-    }
-
     public Optional<ConfirmationToken> getToken(String token) {
         return confirmationTokenRepository.findByToken(token);
     }
 
-    public String createConfirmationToken(User user) {
+    public ConfirmationToken createConfirmationToken(User user) {
         String token = UUID.randomUUID().toString();
 
         ConfirmationToken confirmationToken = new ConfirmationToken();
         confirmationToken.setToken(token);
         confirmationToken.setUser(user);
 
-        saveConfirmationToken(confirmationToken);
+        confirmationTokenRepository.save(confirmationToken);
 
-        return token;
+        return confirmationToken;
     }
 }

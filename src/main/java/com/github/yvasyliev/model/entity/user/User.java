@@ -46,9 +46,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean locked;
 
-    @Column(nullable = false)
-    private boolean enabled;
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -66,7 +63,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
     @Override
@@ -146,9 +143,5 @@ public class User implements UserDetails {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 }

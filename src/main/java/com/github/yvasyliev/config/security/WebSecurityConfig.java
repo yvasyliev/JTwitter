@@ -38,11 +38,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "index", "/css/**", "/js/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/logout").not().fullyAuthenticated()
-                .anyRequest().authenticated()
+                .antMatchers(
+                        "/",
+                        "/css/**",
+                        "/js/**",
+                        "/registration/complete"
+                ).permitAll()
+                .antMatchers("/login",
+                        "/logout",
+                        "/registration"
+                ).not().fullyAuthenticated()
                 .and()
                 .formLogin(fromLogin -> fromLogin
                         .loginProcessingUrl("/login")

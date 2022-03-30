@@ -18,12 +18,12 @@ public class RegistrationService {
     private EmailValidator emailValidator;
 
     @Autowired
-    private UserService userDetailsService;
+    private UserService userService;
 
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    public String register(RegistrationForm registrationForm) {
+    public ConfirmationToken register(RegistrationForm registrationForm) {
         boolean isValidEmail = emailValidator.test(registrationForm.getEmail());
 
         if (!isValidEmail) {
@@ -41,11 +41,11 @@ public class RegistrationService {
         user.setPassword(registrationForm.getPassword());
         user.setRole(Role.UNCONFIRMED_USER);
 
-        return userDetailsService.signUp(user);
+        return userService.register(user);
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public String completeRegistration(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() -> new IllegalStateException("Token was not found."));
@@ -63,7 +63,7 @@ public class RegistrationService {
 
         confirmationToken.setConfirmedAt(now);
 
-        userDetailsService.enableUser(confirmationToken.getUser());
+        userService.confirmUser(confirmationToken.getUser());
 
         return "confirmed";
     }
