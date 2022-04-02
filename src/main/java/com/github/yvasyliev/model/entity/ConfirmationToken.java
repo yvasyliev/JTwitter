@@ -15,6 +15,8 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @Table(name = "confirmation_tokens")
 public class ConfirmationToken {
+    private static final int EXPIRATION = 15;
+
     @Id
     @GeneratedValue
     private Long id;
@@ -26,7 +28,7 @@ public class ConfirmationToken {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime expiresAt = createdAt.plus(15, ChronoUnit.MINUTES);
+    private LocalDateTime expiresAt = createdAt.plus(EXPIRATION, ChronoUnit.MINUTES);
 
     private LocalDateTime confirmedAt;
 

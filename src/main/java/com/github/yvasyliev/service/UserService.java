@@ -1,5 +1,6 @@
 package com.github.yvasyliev.service;
 
+import com.github.yvasyliev.model.dto.RegistrationForm;
 import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
@@ -13,6 +14,10 @@ import javax.transaction.Transactional;
 @Service
 public class UserService {
     private static final String USER_ALREADY_EXISTS_MSG = "User '%s' is already exists.";
+    private static final String EMAIL_NOT_VALID_MSG = "Email '%s' is not valid.";
+
+    @Autowired
+    private EmailValidator emailValidator;
 
     @Autowired
     private UserRepository userRepository;
@@ -23,24 +28,46 @@ public class UserService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    @Transactional
-    public ConfirmationToken register(User user) {
-        boolean userExists = userRepository.findByUsername(user.getUsername()).isPresent();
+    public User register(RegistrationForm registrationForm) {
+        boolean isValidEmail = emailValidator.test(registrationForm.getEmail());
 
-        if (userExists) {
-            throw new IllegalStateException(String.format(USER_ALREADY_EXISTS_MSG, user.getUsername()));
+        if (!isValidEmail) {
+            throw new IllegalArgumentException(String.format(
+                    EMAIL_NOT_VALID_MSG,
+                    registrationForm.getEmail()
+            ));
         }
+
+        User user = new User();
+        user.setUsername(registrationForm.getUsername());
+        user.setEmail(registrationForm.getEmail());
+        user.setFirstName(registrationForm.getFirstName());
+        user.setLastName(registrationForm.getLastName());
+        user.setPassword(registrationForm.getPassword());
+        user.setRole(Role.UNCONFIRMED_USER);
+
+        return register(user);
+    }
+
+    @Transactional
+    public User register(User user) {
+        userRepository.findByUsername(user.getUsername()).ifPresent(existingUser -> {
+            throw new IllegalStateException(String.format(
+                    USER_ALREADY_EXISTS_MSG,
+                    existingUser.getUsername()
+            ));
+        });
+
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        userRepository.save(user);
-
-        return confirmationTokenService.createConfirmationToken(user);
+        return userRepository.save(user);
     }
 
     @Transactional
-    public void confirmUser(User User) {
-        User.setRole(Role.USER);
+    public void confirm(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService.confirm(token);
+        confirmationToken.getUser().setRole(Role.USER);
     }
 }
