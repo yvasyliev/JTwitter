@@ -31,10 +31,10 @@ public class RegistrationController {
     @PostMapping
     public String register(RegistrationForm registrationForm, HttpServletRequest request) {
         User user = userService.register(registrationForm);
-        applicationEventPublisher.publishEvent(new UserRegisteredEvent(
-                user,
-                request.getContextPath()
-        ));
+        String url = request.getRequestURL()
+                .toString()
+                .replace(request.getRequestURI(), "");
+        applicationEventPublisher.publishEvent(new UserRegisteredEvent(user, url));
         return "complete_registration";
     }
 

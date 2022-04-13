@@ -6,7 +6,6 @@ import com.github.yvasyliev.model.event.UserRegisteredEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
-import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -29,7 +28,7 @@ public class UserRegistrationEventListener implements ApplicationListener<UserRe
         User user = event.getUser();
         ConfirmationToken confirmationToken = confirmationTokenService.createConfirmationToken(user);
 
-        MailMessage message = new SimpleMailMessage();
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(user.getEmail());
         message.setSubject("Complete registration");
@@ -38,5 +37,6 @@ public class UserRegistrationEventListener implements ApplicationListener<UserRe
                 event.getUrl(),
                 confirmationToken.getToken()
         ));
+        mailSender.send(message);
     }
 }
