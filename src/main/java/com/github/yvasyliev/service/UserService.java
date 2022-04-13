@@ -70,4 +70,8 @@ public class UserService {
         ConfirmationToken confirmationToken = confirmationTokenService.confirm(token);
         confirmationToken.getUser().setRole(Role.USER);
     }
+
+    public User getById(Long id) {
+        return userRepository.getById(id);
+    }
 }

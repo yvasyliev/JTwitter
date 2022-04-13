@@ -42,7 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/",
                         "/css/**",
                         "/js/**",
-                        "/registration/complete"
+                        "/registration/complete",
+                        "/tweet"
                 ).permitAll()
                 .antMatchers(
                         "/login",
