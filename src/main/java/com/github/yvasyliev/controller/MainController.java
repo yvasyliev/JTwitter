@@ -1,6 +1,5 @@
 package com.github.yvasyliev.controller;
 
-import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TweetService;
 import com.github.yvasyliev.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,7 @@ public class MainController {
 
     @GetMapping
     public String index(Model model, Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            User user = (User) authentication.getPrincipal();
-            model.addAttribute("tweets", tweetService.findByUserId(user.getId()));
-        } else {
-            model.addAttribute("tweets", tweetService.findAll());
-        }
+        model.addAttribute("tweets", tweetService.findAll());
         return "index";
     }
 }
