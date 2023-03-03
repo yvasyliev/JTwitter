@@ -1,14 +1,11 @@
 package com.github.yvasyliev.model.entity.user;
 
-import com.github.yvasyliev.model.entity.Tweet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -49,10 +45,6 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private boolean locked;
-
-    @OneToMany(mappedBy = "user")
-    @OrderBy("created_at desc")
-    private List<Tweet> tweets;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -153,11 +145,4 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
-    public List<Tweet> getTweets() {
-        return tweets;
-    }
-
-    public void setTweets(List<Tweet> tweets) {
-        this.tweets = tweets;
-    }
 }
