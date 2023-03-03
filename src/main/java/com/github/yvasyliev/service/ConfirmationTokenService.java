@@ -3,10 +3,10 @@ package com.github.yvasyliev.service;
 import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.ConfirmationTokenRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,26 +23,24 @@ public class ConfirmationTokenService {
         confirmationToken.setToken(token);
         confirmationToken.setUser(user);
 
-        confirmationTokenRepository.save(confirmationToken);
-
-        return confirmationToken;
+        return confirmationTokenRepository.save(confirmationToken);
     }
 
     @Transactional
     public ConfirmationToken confirm(String token) {
         ConfirmationToken confirmationToken = confirmationTokenRepository
                 .findByToken(token)
-                .orElseThrow(() -> new IllegalStateException("Token was not found."));
+                .orElseThrow(() -> new IllegalStateException("CONFIRMATION_TOKENS was not found by token=" + token));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("Email is already confirmed.");
+            throw new IllegalStateException("ConfirmationToken is already confirmed: " + confirmationToken);
         }
 
         LocalDateTime expiresAt = confirmationToken.getExpiresAt();
         LocalDateTime now = LocalDateTime.now();
 
         if (expiresAt.isBefore(now)) {
-            throw new IllegalStateException("Token is expired.");
+            throw new IllegalStateException("ConfirmationToken is expired: " + confirmationToken);
         }
 
         confirmationToken.setConfirmedAt(now);

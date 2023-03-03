@@ -4,10 +4,10 @@ import com.github.yvasyliev.model.dto.TweetForm;
 import com.github.yvasyliev.model.entity.Tweet;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.TweetRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service

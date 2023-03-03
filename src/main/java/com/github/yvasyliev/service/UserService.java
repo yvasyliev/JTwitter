@@ -5,11 +5,12 @@ import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -73,5 +74,9 @@ public class UserService {
 
     public User getById(Long id) {
         return userRepository.getById(id);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
