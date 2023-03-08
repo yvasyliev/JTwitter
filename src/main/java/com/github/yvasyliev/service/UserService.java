@@ -1,6 +1,6 @@
 package com.github.yvasyliev.service;
 
-import com.github.yvasyliev.model.dto.RegistrationForm;
+import com.github.yvasyliev.model.dto.SignupForm;
 import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    public User register(RegistrationForm registrationForm) {
+    public User register(SignupForm registrationForm) {
         boolean isValidEmail = emailValidator.test(registrationForm.getEmail());
 
         if (!isValidEmail) {
