@@ -4,11 +4,9 @@ import com.github.yvasyliev.model.dto.SignupForm;
 import com.github.yvasyliev.model.entity.token.Token;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
-import com.github.yvasyliev.repository.TokenRepository;
 import com.github.yvasyliev.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +19,10 @@ public class AuthenticationService {
     private UserRepository userRepository;
 
     @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenRepository tokenRepository;
+    private TokenService tokenService;
 
     @Transactional
-    public String signup(SignupForm signupForm) {
+    public Token signup(SignupForm signupForm) {
         var user = new User();
         user.setUsername(signupForm.getUsername());
         user.setEmail(signupForm.getEmail());
@@ -38,13 +30,13 @@ public class AuthenticationService {
         user.setLastName(signupForm.getLastName());
         user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
         user.setRole(Role.USER);
+        return tokenService.createJwtToken(userRepository.save(user));
+    }
 
-        userRepository.save(user);
-
-        var token = new Token();
-        token.setId(jwtService.createJwt(user));
-        token.setUser(user);
-
-        return tokenRepository.save(token).getId();
+    @Transactional
+    public User confirm(String token) {
+        var user = tokenService.getById(token).getUser();
+        user.setRole(Role.CONFIRMED_USER);
+        return userRepository.save(user);
     }
 }

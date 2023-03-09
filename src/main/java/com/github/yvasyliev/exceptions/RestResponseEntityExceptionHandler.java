@@ -1,5 +1,7 @@
 package com.github.yvasyliev.exceptions;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -12,14 +14,27 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     private static final HttpHeaders DUMMY_HEADERS = new HttpHeaders();
 
-    @ExceptionHandler(InvalidFormParameterException.class)
-    public ResponseEntity<?> invalidFormParameter(InvalidFormParameterException e, WebRequest request) {
-        return handleExceptionInternal(e, e.getBody(), DUMMY_HEADERS, HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+        var body = ex.getConstraintViolations()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        constraintViolation -> StreamSupport.stream(
+                                        constraintViolation.getPropertyPath().spliterator(),
+                                        false
+                                )
+                                .reduce((first, second) -> second)
+                                .orElseThrow()
+                                .toString(),
+                        Collectors.mapping(ConstraintViolation::getMessage, Collectors.toList())
+                ));
+        return handleExceptionInternal(ex, body, DUMMY_HEADERS, HttpStatus.BAD_REQUEST, request);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class UserService {
         user.setFirstName(registrationForm.getFirstName());
         user.setLastName(registrationForm.getLastName());
         user.setPassword(registrationForm.getPassword());
-        user.setRole(Role.UNCONFIRMED_USER);
+        user.setRole(Role.CONFIRMED_USER);
 
         return register(user);
     }

@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PathRequest.toH2Console())
                         .permitAll()
-                        .requestMatchers("/api/v1/auth/signup/confirm")
+                        .requestMatchers("/api/v1/auth/confirm")
                         .permitAll()
                         .requestMatchers("/api/v1/auth/signup")
                         .anonymous()
