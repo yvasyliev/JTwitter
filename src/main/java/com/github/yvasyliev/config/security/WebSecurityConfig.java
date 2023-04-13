@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -46,9 +47,16 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PathRequest.toH2Console())
                         .permitAll()
-                        .requestMatchers("/api/v1/auth/signup/confirm")
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/auth/confirm",
+                                "/api/v1/tweets/**"
+                        )
                         .permitAll()
-                        .requestMatchers("/api/v1/auth/signup")
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/auth/signUp",
+                                "/api/v1/auth/signIn")
                         .anonymous()
                         .anyRequest()
                         .authenticated()

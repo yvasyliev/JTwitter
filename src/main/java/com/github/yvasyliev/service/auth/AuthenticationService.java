@@ -1,14 +1,12 @@
 package com.github.yvasyliev.service.auth;
 
-import com.github.yvasyliev.model.dto.SignupForm;
+import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.entity.token.Token;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
-import com.github.yvasyliev.repository.TokenRepository;
 import com.github.yvasyliev.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,30 +19,27 @@ public class AuthenticationService {
     private UserRepository userRepository;
 
     @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenRepository tokenRepository;
+    private TokenService tokenService;
 
     @Transactional
-    public String signup(SignupForm signupForm) {
+    public Token signUp(SignUpForm signupForm) {
         var user = new User();
-        user.setUsername(signupForm.getUsername());
-        user.setEmail(signupForm.getEmail());
-        user.setFirstName(signupForm.getFirstName());
-        user.setLastName(signupForm.getLastName());
-        user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
-        user.setRole(Role.USER);
+        user.setUsername(signupForm.username());
+        user.setPassword(passwordEncoder.encode(signupForm.password()));
+        user.setEmail(signupForm.email());
+        user.setFirstName(signupForm.firstName());
+        user.setLastName(signupForm.lastName());
+        return tokenService.createJwtToken(userRepository.save(user));
+    }
 
-        userRepository.save(user);
+    @Transactional
+    public User confirm(String token) {
+        var user = tokenService.getById(token).getUser();
+        user.setRole(Role.CONFIRMED_USER);
+        return userRepository.save(user);
+    }
 
-        var token = new Token();
-        token.setId(jwtService.createJwt(user));
-        token.setUser(user);
-
-        return tokenRepository.save(token).getId();
+    public Token signOut(String jwt) {
+        return tokenService.revoke(jwt);
     }
 }

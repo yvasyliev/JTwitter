@@ -3,6 +3,8 @@ package com.github.yvasyliev.model.entity.token;
 import com.github.yvasyliev.model.entity.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,8 +26,12 @@ public class Token {
     @Column(nullable = false)
     private Boolean revoked = Boolean.FALSE;
 
-    private boolean isExpired() {
-        return LocalDateTime.now().isBefore(expiresAt);
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiresAt);
     }
 
     public String getId() {
@@ -60,6 +66,14 @@ public class Token {
         this.revoked = revoked;
     }
 
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(TokenType tokenType) {
+        this.tokenType = tokenType;
+    }
+
     @Override
     public String toString() {
         return "Token{" +
@@ -67,6 +81,7 @@ public class Token {
                 ", user=" + user +
                 ", expiresAt=" + expiresAt +
                 ", revoked=" + revoked +
+                ", tokenType=" + tokenType +
                 '}';
     }
 }

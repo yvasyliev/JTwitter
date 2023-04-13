@@ -1,6 +1,6 @@
 package com.github.yvasyliev.controller;
 
-import com.github.yvasyliev.model.dto.SignupForm;
+import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.model.event.UserRegisteredEvent;
 import com.github.yvasyliev.service.UserService;
@@ -28,7 +28,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String register(SignupForm signupForm, HttpServletRequest request) {
+    public String register(SignUpForm signupForm, HttpServletRequest request) {
         User user = userService.register(signupForm);
         String url = request.getRequestURL()
                 .toString()
