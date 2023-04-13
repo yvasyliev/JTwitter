@@ -1,12 +1,6 @@
 package com.github.yvasyliev.model.entity.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -145,4 +139,8 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
+    @PrePersist
+    public void prePersist() {
+        System.out.println(this);
+    }
 }

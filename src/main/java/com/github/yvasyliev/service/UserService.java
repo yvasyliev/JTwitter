@@ -1,6 +1,6 @@
 package com.github.yvasyliev.service;
 
-import com.github.yvasyliev.model.dto.SignupForm;
+import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.entity.ConfirmationToken;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
@@ -29,22 +29,22 @@ public class UserService {
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
 
-    public User register(SignupForm registrationForm) {
-        boolean isValidEmail = emailValidator.test(registrationForm.getEmail());
-
-        if (!isValidEmail) {
-            throw new IllegalArgumentException(String.format(
-                    EMAIL_NOT_VALID_MSG,
-                    registrationForm.getEmail()
-            ));
-        }
+    public User register(SignUpForm registrationForm) {
+//        boolean isValidEmail = emailValidator.test(registrationForm.getEmail());
+//
+//        if (!isValidEmail) {
+//            throw new IllegalArgumentException(String.format(
+//                    EMAIL_NOT_VALID_MSG,
+//                    registrationForm.getEmail()
+//            ));
+//        }
 
         User user = new User();
-        user.setUsername(registrationForm.getUsername());
-        user.setEmail(registrationForm.getEmail());
-        user.setFirstName(registrationForm.getFirstName());
-        user.setLastName(registrationForm.getLastName());
-        user.setPassword(registrationForm.getPassword());
+//        user.setUsername(registrationForm.getUsername());
+//        user.setEmail(registrationForm.getEmail());
+//        user.setFirstName(registrationForm.getFirstName());
+//        user.setLastName(registrationForm.getLastName());
+//        user.setPassword(registrationForm.getPassword());
         user.setRole(Role.CONFIRMED_USER);
 
         return register(user);

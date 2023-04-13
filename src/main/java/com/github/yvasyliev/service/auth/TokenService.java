@@ -48,4 +48,11 @@ public class TokenService {
     public Token getById(String id) {
         return tokenRepository.findById(id).orElseThrow();
     }
+
+    @Transactional
+    public Token revoke(String id) {
+        var token = getById(id);
+        token.setRevoked(true);
+        return tokenRepository.save(token);
+    }
 }

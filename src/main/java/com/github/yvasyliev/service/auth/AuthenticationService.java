@@ -1,6 +1,6 @@
 package com.github.yvasyliev.service.auth;
 
-import com.github.yvasyliev.model.dto.SignupForm;
+import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.entity.token.Token;
 import com.github.yvasyliev.model.entity.user.Role;
 import com.github.yvasyliev.model.entity.user.User;
@@ -22,14 +22,13 @@ public class AuthenticationService {
     private TokenService tokenService;
 
     @Transactional
-    public Token signup(SignupForm signupForm) {
+    public Token signUp(SignUpForm signupForm) {
         var user = new User();
-        user.setUsername(signupForm.getUsername());
-        user.setEmail(signupForm.getEmail());
-        user.setFirstName(signupForm.getFirstName());
-        user.setLastName(signupForm.getLastName());
-        user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
-        user.setRole(Role.USER);
+        user.setUsername(signupForm.username());
+        user.setPassword(passwordEncoder.encode(signupForm.password()));
+        user.setEmail(signupForm.email());
+        user.setFirstName(signupForm.firstName());
+        user.setLastName(signupForm.lastName());
         return tokenService.createJwtToken(userRepository.save(user));
     }
 
@@ -38,5 +37,9 @@ public class AuthenticationService {
         var user = tokenService.getById(token).getUser();
         user.setRole(Role.CONFIRMED_USER);
         return userRepository.save(user);
+    }
+
+    public Token signOut(String jwt) {
+        return tokenService.revoke(jwt);
     }
 }

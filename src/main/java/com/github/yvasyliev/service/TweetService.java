@@ -1,6 +1,7 @@
 package com.github.yvasyliev.service;
 
-import com.github.yvasyliev.model.dto.TweetForm;
+import com.github.yvasyliev.model.dto.CreateTweetForm;
+import com.github.yvasyliev.model.dto.TweetDTO;
 import com.github.yvasyliev.model.entity.Tweet;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.TweetRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TweetService {
@@ -16,11 +18,22 @@ public class TweetService {
     private TweetRepository tweetRepository;
 
     @Transactional
-    public Tweet createTweet(TweetForm tweetForm, User user) {
+    public Tweet createTweet(User user, CreateTweetForm createTweetForm) {
         Tweet tweet = new Tweet();
         tweet.setUser(user);
-        tweet.setText(tweetForm.getText());
+        tweet.setText(createTweetForm.text());
+
+        var parentTweetId = createTweetForm.parentTweetId();
+        if (parentTweetId != null) {
+            tweetRepository.findById(parentTweetId).ifPresent(tweet::setParentTweet);
+        }
+
         return tweetRepository.save(tweet);
+    }
+
+    @Transactional
+    public void deleteTweet(Long tweetId) {
+        tweetRepository.deleteById(tweetId);
     }
 
     public List<Tweet> findAll() {
@@ -29,5 +42,9 @@ public class TweetService {
 
     public List<Tweet> findByUserId(Long userId) {
         return tweetRepository.findByUserId(userId);
+    }
+
+    public Optional<TweetDTO> findById(long tweetId) {
+        return tweetRepository.findTweetDTOById(tweetId);
     }
 }
