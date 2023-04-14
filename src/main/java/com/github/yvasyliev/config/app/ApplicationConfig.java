@@ -1,18 +1,30 @@
 package com.github.yvasyliev.config.app;
 
+import com.github.yvasyliev.model.entity.token.Token;
+import com.github.yvasyliev.uitls.RequestUtils;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.passay.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.EnglishSequenceData;
+import org.passay.IllegalSequenceRule;
+import org.passay.LengthRule;
+import org.passay.PasswordValidator;
+import org.passay.Rule;
+import org.passay.WhitespaceRule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.security.Key;
 import java.util.concurrent.Executor;
+import java.util.function.BiFunction;
 
 @Configuration
 @EnableAsync
@@ -131,5 +143,14 @@ public class ApplicationConfig {
     @Bean
     public JwtParser jwtParser() {
         return Jwts.parserBuilder().setSigningKey(signingKey()).build();
+    }
+
+    @Bean
+    public BiFunction<HttpServletRequest, Token, String> emailConfirmationTextFactory() {
+        return (request, token) -> "Please follow the link to confirm email: " + UriComponentsBuilder
+                .fromHttpUrl(RequestUtils.getHost(request))
+                .pathSegment("api", "v1", "auth", "confirm")
+                .queryParam("token", token.getId())
+                .toUriString();
     }
 }

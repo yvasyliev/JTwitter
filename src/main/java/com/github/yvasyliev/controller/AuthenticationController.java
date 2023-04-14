@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,9 +41,9 @@ public class AuthenticationController {
         return new TokenDTO(token.getId(), token.getExpiresAt());
     }
 
-    @GetMapping("/confirm")
-    public ResponseEntity<?> confirm(@RequestParam @ValidEmailToken String token) {
-        authenticationService.confirm(token);
+    @GetMapping("/confirmEmail")
+    public ResponseEntity<?> confirmEmail(@RequestParam @ValidEmailToken String tokenId) {
+        authenticationService.confirmEmail(tokenId);
         return ResponseEntity.noContent().build();
     }
 
@@ -57,7 +56,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/signOut")
-    public ResponseEntity<?> signOut(HttpServletRequest request, Authentication authentication) {
+    public ResponseEntity<?> signOut(HttpServletRequest request) {
         var jwt = request.getHeader(AUTHORIZATION).substring(BEARER_PREFIX.length());
         authenticationService.signOut(jwt);
         return ResponseEntity.noContent().build();

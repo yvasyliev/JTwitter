@@ -33,8 +33,8 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public User confirm(String token) {
-        var user = tokenService.getById(token).getUser();
+    public User confirmEmail(String tokenId) {
+        var user = tokenService.getById(tokenId).getUser();
         user.setRole(Role.CONFIRMED_USER);
         return userRepository.save(user);
     }
