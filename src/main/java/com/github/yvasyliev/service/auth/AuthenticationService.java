@@ -34,7 +34,7 @@ public class AuthenticationService {
 
     @Transactional
     public User confirmEmail(String tokenId) {
-        var user = tokenService.getById(tokenId).getUser();
+        var user = tokenService.revoke(tokenId).getUser();
         user.setRole(Role.CONFIRMED_USER);
         return userRepository.save(user);
     }

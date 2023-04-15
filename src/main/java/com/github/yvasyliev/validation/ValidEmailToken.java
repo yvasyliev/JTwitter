@@ -32,32 +32,30 @@ public @interface ValidEmailToken {
             var optionalToken = tokenRepository.findByIdAndTokenType(tokenId, TokenType.EMAIL);
 
             if (optionalToken.isEmpty()) {
-                validatorContext
-                        .buildConstraintViolationWithTemplate("Unknown token.")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
+                addConstraintViolation(validatorContext, "Unknown token.");
                 return false;
             }
 
             var token = optionalToken.get();
 
             if (token.isExpired()) {
-                validatorContext
-                        .buildConstraintViolationWithTemplate("Token expired.")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
+                addConstraintViolation(validatorContext, "Token expired.");
                 return false;
             }
 
             if (token.getRevoked()) {
-                validatorContext
-                        .buildConstraintViolationWithTemplate("Token revoked.")
-                        .addConstraintViolation()
-                        .disableDefaultConstraintViolation();
+                addConstraintViolation(validatorContext, "Token revoked.");
                 return false;
             }
 
             return true;
+        }
+
+        private void addConstraintViolation(ConstraintValidatorContext validatorContext, String message) {
+            validatorContext
+                    .buildConstraintViolationWithTemplate(message)
+                    .addConstraintViolation()
+                    .disableDefaultConstraintViolation();
         }
     }
 }
