@@ -4,6 +4,7 @@ import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.entity.user.User;
+import com.github.yvasyliev.service.EmailSender;
 import com.github.yvasyliev.service.auth.AuthenticationService;
 import com.github.yvasyliev.service.auth.TokenService;
 import com.github.yvasyliev.validation.ValidEmailToken;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,9 @@ public class AuthenticationController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private EmailSender emailSender;
 
     @PostMapping("/signUp")
     public TokenDTO signUp(@Valid @RequestBody SignUpForm signupForm, HttpServletRequest request) throws ServletException {
@@ -59,6 +64,16 @@ public class AuthenticationController {
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         var jwt = request.getHeader(AUTHORIZATION).substring(BEARER_PREFIX.length());
         authenticationService.signOut(jwt);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/sendEmailConfirmation")
+    public ResponseEntity<?> sendEmailConfirmation(HttpServletRequest request, Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        tokenService.revokeEmailToken(user);
+
+        var token = tokenService.createJwtToken(user);
+        emailSender.sendEmailConfirmation(request, token);
         return ResponseEntity.noContent().build();
     }
 }

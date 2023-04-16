@@ -45,14 +45,29 @@ public class TokenService {
         return tokenRepository.save(token);
     }
 
-    public Token getById(String id) {
-        return tokenRepository.findById(id).orElseThrow();
+    public Token getById(String tokenId) {
+        return tokenRepository.findById(tokenId).orElseThrow();
     }
 
     @Transactional
-    public Token revoke(String id) {
-        var token = getById(id);
+    public Token revoke(String tokenId) {
+        return revoke(getById(tokenId));
+    }
+
+    @Transactional
+    public Token revoke(Token token) {
         token.setRevoked(true);
         return tokenRepository.save(token);
+    }
+
+    @Transactional
+    public void revokeEmailToken(User user) {
+        tokenRepository
+                .findByUser_IdAndExpiresAtGreaterThanEqualAndRevokedFalseAndTokenType(
+                        user.getId(),
+                        LocalDateTime.now(),
+                        TokenType.EMAIL
+                )
+                .ifPresent(this::revoke);
     }
 }

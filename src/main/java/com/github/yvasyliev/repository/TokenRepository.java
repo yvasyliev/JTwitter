@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface TokenRepository extends JpaRepository<Token, String> {
+    Optional<Token> findByUser_IdAndExpiresAtGreaterThanEqualAndRevokedFalseAndTokenType(Long userId, LocalDateTime expiresAt, TokenType tokenType);
     Optional<Token> findByIdAndTokenType(String id, TokenType tokenType);
     boolean existsByIdAndUser_UsernameAndExpiresAtGreaterThanEqualAndRevokedFalse(String id, String username, LocalDateTime expiresAt);
 }
