@@ -20,10 +20,9 @@ public class TokenService {
     private JwtService jwtService;
 
     public boolean isValid(String token, String username) {
-        return tokenRepository.existsByIdAndUser_UsernameAndExpiresAtGreaterThanEqualAndRevokedFalse(
+        return tokenRepository.isJWTAvailable(
                 token,
-                username,
-                LocalDateTime.now()
+                username
         );
     }
 

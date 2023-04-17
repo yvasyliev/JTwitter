@@ -28,6 +28,6 @@ public class EmailSender {
         message.setSubject("Email confirmation");
         message.setText(emailConfirmationTextFactory.apply(request, token));
         // TODO: 3/8/2023 uncomment
-        mailSender.send(message);
+//        mailSender.send(message);
     }
 }
