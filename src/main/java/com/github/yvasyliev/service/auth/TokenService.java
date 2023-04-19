@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -61,12 +60,6 @@ public class TokenService {
 
     @Transactional
     public void revokeEmailToken(User user) {
-        tokenRepository
-                .findByUser_IdAndExpiresAtGreaterThanEqualAndRevokedFalseAndTokenType(
-                        user.getId(),
-                        LocalDateTime.now(),
-                        TokenType.EMAIL
-                )
-                .ifPresent(this::revoke);
+        tokenRepository.revokeActiveEmailToken(user.getId());
     }
 }
