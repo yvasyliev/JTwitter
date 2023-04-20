@@ -18,8 +18,8 @@ public class TokenService {
     @Autowired
     private JwtService jwtService;
 
-    public boolean isValid(String token, String username) {
-        return tokenRepository.isJWTAvailable(
+    public boolean isJWTValid(String token, String username) {
+        return tokenRepository.isJWTValid(
                 token,
                 username
         );

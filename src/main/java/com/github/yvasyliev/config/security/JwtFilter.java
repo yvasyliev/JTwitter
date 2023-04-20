@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (authorization != null && authorization.startsWith(BEARER_PREFIX)) {
                 var jwt = authorization.substring(BEARER_PREFIX.length());
                 var subject = jwtService.getSubject(jwt);
-                if (!jwtService.isExpired(jwt) && tokenService.isValid(jwt, subject)) {
+                if (!jwtService.isExpired(jwt) && tokenService.isJWTValid(jwt, subject)) {
                     var userDetails = userDetailsService.loadUserByUsername(subject);
                     var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

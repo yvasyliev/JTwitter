@@ -38,5 +38,5 @@ public interface TokenRepository extends JpaRepository<Token, String> {
                 and t.expiresAt >= CURRENT_TIMESTAMP
                 and t.tokenType = 'JWT'
                 and not(t.revoked)""")
-    boolean isJWTAvailable(@Param("id") String id, @Param("username") String username);
+    boolean isJWTValid(@Param("id") String id, @Param("username") String username);
 }
