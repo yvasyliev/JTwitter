@@ -19,7 +19,7 @@ public interface TokenRepository extends JpaRepository<Token, String> {
             set
                 t.revoked = true
             where
-                t.userId = :userId
+                t.user.id = :userId
                 and t.expiresAt >= CURRENT_TIMESTAMP
                 and t.tokenType = 'EMAIL'
                 and not(t.revoked)""")
