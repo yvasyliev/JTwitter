@@ -1,12 +1,23 @@
 package com.github.yvasyliev.model.entity.user;
 
-import jakarta.persistence.*;
+import com.github.yvasyliev.model.entity.Tweet;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -39,6 +50,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private boolean locked;
+
+    @ManyToMany
+    @JoinTable(name = "tweet_like", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+    private Set<Tweet> likedTweets;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -139,8 +154,11 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
-    @PrePersist
-    public void prePersist() {
-        System.out.println(this);
+    public Set<Tweet> getLikedTweets() {
+        return likedTweets;
+    }
+
+    public void setLikedTweets(Set<Tweet> likedTweets) {
+        this.likedTweets = likedTweets;
     }
 }

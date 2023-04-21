@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -39,6 +40,9 @@ public class Tweet {
     @Column(nullable = false)
     @Size(min = 1, max = 256)
     private String text;
+
+    @ManyToMany(mappedBy = "likedTweets")
+    private Set<User> likes;
 
     public Long getId() {
         return id;
@@ -78,5 +82,21 @@ public class Tweet {
 
     public void setParentTweet(Tweet parentTweet) {
         this.parentTweet = parentTweet;
+    }
+
+    public Set<Tweet> getChildTweets() {
+        return childTweets;
+    }
+
+    public void setChildTweets(Set<Tweet> childTweets) {
+        this.childTweets = childTweets;
+    }
+
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
     }
 }
