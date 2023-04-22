@@ -4,6 +4,7 @@ import com.github.yvasyliev.model.dto.CreateTweetForm;
 import com.github.yvasyliev.model.dto.TweetDTO;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TweetService;
+import com.github.yvasyliev.validation.TweetExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,13 +31,13 @@ public class TweetController {
     }
 
     @DeleteMapping("/{tweetId}")
-    public ResponseEntity<?> deleteTweet(@PathVariable long tweetId) {
+    public ResponseEntity<?> deleteTweet(@PathVariable @TweetExists Long tweetId) {
         tweetService.deleteTweet(tweetId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{tweetId}")
-    public ResponseEntity<TweetDTO> getTweetById(@PathVariable long tweetId) {
+    public ResponseEntity<TweetDTO> getTweetById(@PathVariable Long tweetId) {
         return tweetService
                 .findById(tweetId)
                 .map(ResponseEntity::ok)

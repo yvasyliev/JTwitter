@@ -6,13 +6,17 @@ import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Documented
-@Target(ElementType.FIELD)
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TweetExists {
-    String message() default "Parent tweet doesn't exist.";
+    String message() default "Tweet doesn't exist.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
@@ -21,8 +25,8 @@ public @interface TweetExists {
         private TweetRepository tweetRepository;
 
         @Override
-        public boolean isValid(Long parentTweetId, ConstraintValidatorContext constraintValidatorContext) {
-            return parentTweetId == null || tweetRepository.existsById(parentTweetId);
+        public boolean isValid(Long tweetId, ConstraintValidatorContext constraintValidatorContext) {
+            return tweetRepository.existsById(tweetId);
         }
     }
 }

@@ -32,7 +32,7 @@ public class TweetService {
     }
 
     @Transactional
-    public void deleteTweet(Long tweetId) {
+    public void deleteTweet(long tweetId) {
         tweetRepository.deleteById(tweetId);
     }
 
