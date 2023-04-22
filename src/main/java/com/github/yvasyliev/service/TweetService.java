@@ -40,10 +40,6 @@ public class TweetService {
         return tweetRepository.findAll();
     }
 
-    public List<Tweet> findByUserId(Long userId) {
-        return tweetRepository.findByUserId(userId);
-    }
-
     public Optional<TweetDTO> findById(long tweetId) {
         return tweetRepository.findTweetDTOById(tweetId);
     }
