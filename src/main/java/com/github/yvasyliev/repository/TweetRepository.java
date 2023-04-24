@@ -4,6 +4,7 @@ import com.github.yvasyliev.model.dto.TweetDTO;
 import com.github.yvasyliev.model.entity.Tweet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,23 +12,17 @@ import java.util.Optional;
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
     @Query("""
-            SELECT
+            select
                 new com.github.yvasyliev.model.dto.TweetDTO(
                     t.id,
                     t.text,
                     t.createdAt,
-                    (
-                        SELECT
-                            COUNT(c_t)
-                        FROM
-                            Tweet c_t
-                        WHERE
-                            c_t.parentTweet.id = t.id
-                    )
+                    size(t.childTweets),
+                    size(t.likes)
                 )
-            FROM
+            from
                 Tweet t
-            WHERE
-                t.id = ?1""")
-    Optional<TweetDTO> findTweetDTOById(Long tweetId);
+            where
+                t.id = :tweetId""")
+    Optional<TweetDTO> findTweetDTOById(@Param("tweetId") Long tweetId);
 }
