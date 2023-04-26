@@ -52,7 +52,7 @@ public class User implements UserDetails {
     private boolean locked;
 
     @ManyToMany
-    @JoinTable(name = "tweet_like", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+    @JoinTable(name = "tweet_likes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
     private Set<Tweet> likedTweets;
 
     @Override
