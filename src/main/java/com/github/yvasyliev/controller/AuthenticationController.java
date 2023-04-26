@@ -3,6 +3,7 @@ package com.github.yvasyliev.controller;
 import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
+import com.github.yvasyliev.model.dto.UpdateEmailForm;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.EmailSender;
 import com.github.yvasyliev.service.auth.AuthenticationService;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +76,18 @@ public class AuthenticationController {
 
         var token = tokenService.createJwtToken(user);
         emailSender.sendEmailConfirmation(request, token);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/updateEmail")
+    public ResponseEntity<?> updateEmail(@RequestBody UpdateEmailForm updateEmailForm, HttpServletRequest request, Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        authenticationService.updateEmail(updateEmailForm.email(), user);
+
+        var emailToken = tokenService.createEmailToken(user);
+        emailSender.sendEmailConfirmation(request, emailToken);
+
         return ResponseEntity.noContent().build();
     }
 }

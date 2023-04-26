@@ -42,4 +42,11 @@ public class AuthenticationService {
     public Token signOut(String jwt) {
         return tokenService.revoke(jwt);
     }
+
+    @Transactional
+    public User updateEmail(String email, User user) {
+        user.setEmail(email);
+        user.setRole(Role.USER);
+        return userRepository.save(user);
+    }
 }

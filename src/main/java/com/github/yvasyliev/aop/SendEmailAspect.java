@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 
 @Aspect
 @Configuration
@@ -19,7 +18,6 @@ public class SendEmailAspect {
     @Autowired
     private EmailSender emailSender;
 
-    @Async
     @AfterReturning(value = "execution(* com.github.yvasyliev.controller.AuthenticationController.signUp(..)) && args(..,request)", returning = "tokenDTO")
     public void sendEmailConfirmation(HttpServletRequest request, TokenDTO tokenDTO) {
         var user = tokenService.getById(tokenDTO.token()).getUser();
