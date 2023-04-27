@@ -49,4 +49,10 @@ public class AuthenticationService {
         user.setRole(Role.USER);
         return userRepository.save(user);
     }
+
+    @Transactional
+    public User updatePassword(String password, User user) {
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
 }

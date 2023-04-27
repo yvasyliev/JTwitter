@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.security.Key;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Configuration
 @EnableAsync
@@ -152,5 +153,17 @@ public class ApplicationConfig {
                 .pathSegment("api", "v1", "auth", "confirm")
                 .queryParam("token", token.getId())
                 .toUriString();
+    }
+
+    @Bean
+    public Function<HttpServletRequest, String> passwordChangedTextFactory() {
+        return request ->
+                "Your password has been changed. If it wasn't you, please reset your password now: %s"
+                        .formatted(
+                                UriComponentsBuilder
+                                        .fromHttpUrl(RequestUtils.getHost(request))
+                                        .pathSegment("resetPassword")
+                                        .toUriString()
+                        );
     }
 }

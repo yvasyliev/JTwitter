@@ -1,5 +1,6 @@
 package com.github.yvasyliev.controller;
 
+import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
@@ -87,6 +88,19 @@ public class AuthenticationController {
 
         var emailToken = tokenService.createEmailToken(user);
         emailSender.sendEmailConfirmation(request, emailToken);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordForm updatePasswordForm, HttpServletRequest request, Authentication authentication) {
+        emailSender.sendPasswordChangedEmail(
+                request,
+                authenticationService.updatePassword(
+                        updatePasswordForm.newPassword(),
+                        (User) authentication.getPrincipal()
+                )
+        );
 
         return ResponseEntity.noContent().build();
     }
