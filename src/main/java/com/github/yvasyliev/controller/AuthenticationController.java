@@ -1,19 +1,22 @@
 package com.github.yvasyliev.controller;
 
-import com.github.yvasyliev.model.dto.UpdatePasswordForm;
+import com.github.yvasyliev.events.PasswordChanged;
+import com.github.yvasyliev.events.EmailChanged;
 import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.dto.UpdateEmailForm;
+import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.entity.user.User;
-import com.github.yvasyliev.service.EmailSender;
 import com.github.yvasyliev.service.auth.AuthenticationService;
 import com.github.yvasyliev.service.auth.TokenService;
+import com.github.yvasyliev.uitls.RequestUtils;
 import com.github.yvasyliev.validation.ValidEmailToken;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,15 +40,16 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @Autowired
-    private TokenService tokenService;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    private EmailSender emailSender;
+    private TokenService tokenService;
 
     @PostMapping("/signUp")
     public TokenDTO signUp(@Valid @RequestBody SignUpForm signupForm, HttpServletRequest request) throws ServletException {
         var token = authenticationService.signUp(signupForm);
         request.login(signupForm.username(), signupForm.password());
+        eventPublisher.publishEvent(new EmailChanged(RequestUtils.getHost(request), token.getUser()));
         return new TokenDTO(token.getId(), token.getExpiresAt());
     }
 
@@ -74,34 +78,25 @@ public class AuthenticationController {
     public ResponseEntity<?> sendEmailConfirmation(HttpServletRequest request, Authentication authentication) {
         var user = (User) authentication.getPrincipal();
         tokenService.revokeEmailToken(user);
-
-        var token = tokenService.createJwtToken(user);
-        emailSender.sendEmailConfirmation(request, token);
-
+        eventPublisher.publishEvent(new EmailChanged(RequestUtils.getHost(request), user));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/updateEmail")
     public ResponseEntity<?> updateEmail(@RequestBody UpdateEmailForm updateEmailForm, HttpServletRequest request, Authentication authentication) {
         var user = (User) authentication.getPrincipal();
-        authenticationService.updateEmail(updateEmailForm.email(), user);
-
-        var emailToken = tokenService.createEmailToken(user);
-        emailSender.sendEmailConfirmation(request, emailToken);
-
+        user = authenticationService.updateEmail(updateEmailForm.email(), user);
+        eventPublisher.publishEvent(new EmailChanged(RequestUtils.getHost(request), user));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/updatePassword")
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordForm updatePasswordForm, HttpServletRequest request, Authentication authentication) {
-        emailSender.sendPasswordChangedEmail(
-                request,
-                authenticationService.updatePassword(
-                        updatePasswordForm.newPassword(),
-                        (User) authentication.getPrincipal()
-                )
+        var user = authenticationService.updatePassword(
+                updatePasswordForm.newPassword(),
+                (User) authentication.getPrincipal()
         );
-
+        eventPublisher.publishEvent(new PasswordChanged(RequestUtils.getHost(request), user));
         return ResponseEntity.noContent().build();
     }
 }
