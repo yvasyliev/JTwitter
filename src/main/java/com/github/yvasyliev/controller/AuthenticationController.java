@@ -67,7 +67,7 @@ public class AuthenticationController {
         return new TokenDTO(token.getId(), token.getExpiresAt());
     }
 
-    @GetMapping("/signOut")
+    @PostMapping("/signOut")
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         var jwt = request.getHeader(AUTHORIZATION).substring(BEARER_PREFIX.length());
         authenticationService.signOut(jwt);
