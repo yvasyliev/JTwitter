@@ -1,7 +1,7 @@
 package com.github.yvasyliev.controller;
 
-import com.github.yvasyliev.events.PasswordChanged;
 import com.github.yvasyliev.events.EmailChanged;
+import com.github.yvasyliev.events.PasswordChanged;
 import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/users")
 @Validated
-public class AuthenticationController {
+public class UserController {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
 
@@ -45,7 +44,7 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("/signUp")
+    @PostMapping
     public TokenDTO signUp(@Valid @RequestBody SignUpForm signupForm, HttpServletRequest request) throws ServletException {
         var token = authenticationService.signUp(signupForm);
         request.login(signupForm.username(), signupForm.password());
@@ -53,7 +52,7 @@ public class AuthenticationController {
         return new TokenDTO(token.getId(), token.getExpiresAt());
     }
 
-    @GetMapping("/confirmEmail")
+    @PostMapping("/email/confirm")
     public ResponseEntity<?> confirmEmail(@RequestParam @ValidEmailToken String tokenId) {
         authenticationService.confirmEmail(tokenId);
         return ResponseEntity.noContent().build();
@@ -74,7 +73,7 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/sendEmailConfirmation")
+    @PostMapping("/email/sendConfirmation")
     public ResponseEntity<?> sendEmailConfirmation(HttpServletRequest request, Authentication authentication) {
         var user = (User) authentication.getPrincipal();
         tokenService.revokeEmailToken(user);
@@ -82,7 +81,7 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/updateEmail")
+    @PatchMapping("/email")
     public ResponseEntity<?> updateEmail(@RequestBody UpdateEmailForm updateEmailForm, HttpServletRequest request, Authentication authentication) {
         var user = (User) authentication.getPrincipal();
         user = authenticationService.updateEmail(updateEmailForm.email(), user);
@@ -90,7 +89,7 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/updatePassword")
+    @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordForm updatePasswordForm, HttpServletRequest request, Authentication authentication) {
         var user = authenticationService.updatePassword(
                 updatePasswordForm.newPassword(),

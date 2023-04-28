@@ -49,14 +49,18 @@ public class WebSecurityConfig {
                         .permitAll()
                         .requestMatchers(
                                 HttpMethod.GET,
-                                "/api/v1/auth/confirm",
                                 "/api/v1/tweets/**"
                         )
                         .permitAll()
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/v1/auth/signUp",
-                                "/api/v1/auth/signIn")
+                                "/api/v1/users/email/confirm"
+                        )
+                        .permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/users",
+                                "/api/v1/users/signIn")
                         .anonymous()
                         .anyRequest()
                         .authenticated()
