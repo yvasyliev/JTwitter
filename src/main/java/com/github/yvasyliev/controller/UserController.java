@@ -6,6 +6,7 @@ import com.github.yvasyliev.model.dto.SignInForm;
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.dto.UpdateEmailForm;
+import com.github.yvasyliev.model.dto.UpdateFirstNameForm;
 import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TokenService;
@@ -106,6 +107,12 @@ public class UserController {
     @PatchMapping("/photo")
     public ResponseEntity<?> setUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
         userService.setUserPhoto(photo, (User) authentication.getPrincipal());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/firstName")
+    public ResponseEntity<?> updateFirstName(@RequestBody UpdateFirstNameForm updateFirstNameForm, Authentication authentication) {
+        userService.updateFirstName(updateFirstNameForm.firstName(), (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 }

@@ -74,6 +74,12 @@ public class UserService {
         photo.transferTo(Paths.get(userPhotoDir, filename));
     }
 
+    @Transactional
+    public User updateFirstName(String firstName, User user) {
+        user.setFirstName(firstName);
+        return userRepository.save(user);
+    }
+
     private String generateFilename(MultipartFile file) {
         var contentType = Objects.requireNonNull(file.getContentType());
         var extension = contentType.substring(contentType.indexOf('/') + 1);
