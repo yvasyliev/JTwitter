@@ -7,8 +7,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -51,8 +50,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private boolean locked;
 
-    @ManyToMany
-    @JoinTable(name = "tweet_likes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+    @ManyToMany(mappedBy = "likes")
     private Set<Tweet> likedTweets;
 
     @Column(nullable = false)
@@ -171,5 +169,18 @@ public class User implements UserDetails {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

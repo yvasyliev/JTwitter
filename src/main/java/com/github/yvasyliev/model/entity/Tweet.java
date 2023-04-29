@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -41,7 +42,12 @@ public class Tweet {
     @Size(min = 1, max = 256)
     private String text;
 
-    @ManyToMany(mappedBy = "likedTweets")
+    @ManyToMany
+    @JoinTable(
+            name = "tweet_likes",
+            joinColumns = @JoinColumn(name = "tweet_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> likes;
 
     public Long getId() {

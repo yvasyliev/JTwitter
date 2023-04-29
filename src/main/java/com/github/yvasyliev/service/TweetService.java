@@ -39,12 +39,21 @@ public class TweetService {
         return tweetRepository.findTweetDTOById(tweetId);
     }
 
+    public Tweet getById(Long tweetId) {
+        return tweetRepository.findById(tweetId).orElseThrow();
+    }
+
     @Transactional
     public void likeTweet(Long tweetId, User user) {
-        tweetRepository.findById(tweetId).ifPresent(tweet -> {
-            var likes = tweet.getLikes();
-            likes.add(user);
-            tweetRepository.save(tweet);
-        });
+        var tweet = getById(tweetId);
+        tweet.getLikes().add(user);
+        tweetRepository.save(tweet);
+    }
+
+    @Transactional
+    public void unlikeTweet(Long tweetId, User user) {
+        var tweet = getById(tweetId);
+        tweet.getLikes().remove(user);
+        tweetRepository.save(tweet);
     }
 }

@@ -51,4 +51,10 @@ public class TweetController {
         tweetService.likeTweet(tweetId, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{tweetId}/like")
+    public ResponseEntity<?> unlikeTweet(@PathVariable @TweetExists Long tweetId, Authentication authentication) {
+        tweetService.unlikeTweet(tweetId, (User) authentication.getPrincipal());
+        return ResponseEntity.noContent().build();
+    }
 }
