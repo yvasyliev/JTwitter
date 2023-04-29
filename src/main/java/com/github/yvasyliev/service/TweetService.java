@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,10 +33,6 @@ public class TweetService {
     @Transactional
     public void deleteTweet(long tweetId) {
         tweetRepository.deleteById(tweetId);
-    }
-
-    public List<Tweet> findAll() {
-        return tweetRepository.findAll();
     }
 
     public Optional<TweetDTO> findById(long tweetId) {
