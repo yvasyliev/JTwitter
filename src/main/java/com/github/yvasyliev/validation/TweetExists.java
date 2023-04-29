@@ -1,6 +1,7 @@
 package com.github.yvasyliev.validation;
 
 import com.github.yvasyliev.repository.TweetRepository;
+import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
@@ -15,6 +16,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = TweetExists.Validator.class)
 public @interface TweetExists {
     String message() default "Tweet doesn't exist.";
     Class<?>[] groups() default {};

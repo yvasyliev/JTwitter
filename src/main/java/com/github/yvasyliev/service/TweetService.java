@@ -38,4 +38,13 @@ public class TweetService {
     public Optional<TweetDTO> findById(long tweetId) {
         return tweetRepository.findTweetDTOById(tweetId);
     }
+
+    @Transactional
+    public void likeTweet(Long tweetId, User user) {
+        tweetRepository.findById(tweetId).ifPresent(tweet -> {
+            var likes = tweet.getLikes();
+            likes.add(user);
+            tweetRepository.save(tweet);
+        });
+    }
 }
