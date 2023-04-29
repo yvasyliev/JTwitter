@@ -104,7 +104,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
         userService.setUserPhoto(photo, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
