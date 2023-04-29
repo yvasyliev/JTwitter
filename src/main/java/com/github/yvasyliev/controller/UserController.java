@@ -7,6 +7,7 @@ import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.dto.UpdateEmailForm;
 import com.github.yvasyliev.model.dto.UpdateFirstNameForm;
+import com.github.yvasyliev.model.dto.UpdateLastNameForm;
 import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TokenService;
@@ -113,6 +114,12 @@ public class UserController {
     @PatchMapping("/firstName")
     public ResponseEntity<?> updateFirstName(@RequestBody UpdateFirstNameForm updateFirstNameForm, Authentication authentication) {
         userService.updateFirstName(updateFirstNameForm.firstName(), (User) authentication.getPrincipal());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/lastName")
+    public ResponseEntity<?> updateLastName(@RequestBody UpdateLastNameForm updateLastNameForm, Authentication authentication) {
+        userService.updateLastName(updateLastNameForm.lastName(), (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 }

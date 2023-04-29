@@ -80,6 +80,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public User updateLastName(String lastName, User user) {
+        user.setLastName(lastName);
+        return userRepository.save(user);
+    }
+
     private String generateFilename(MultipartFile file) {
         var contentType = Objects.requireNonNull(file.getContentType());
         var extension = contentType.substring(contentType.indexOf('/') + 1);
