@@ -8,8 +8,8 @@ import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.dto.UpdateEmailForm;
 import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.entity.user.User;
-import com.github.yvasyliev.service.UserService;
 import com.github.yvasyliev.service.TokenService;
+import com.github.yvasyliev.service.UserService;
 import com.github.yvasyliev.uitls.RequestUtils;
 import com.github.yvasyliev.validation.SupportedImageFormat;
 import com.github.yvasyliev.validation.ValidEmailToken;
@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -104,8 +103,8 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
+    @PatchMapping("/photo")
+    public ResponseEntity<?> setUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
         userService.setUserPhoto(photo, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
