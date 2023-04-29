@@ -1,4 +1,4 @@
-package com.github.yvasyliev.service.auth;
+package com.github.yvasyliev.service;
 
 import com.github.yvasyliev.model.entity.token.Token;
 import com.github.yvasyliev.model.entity.token.TokenType;

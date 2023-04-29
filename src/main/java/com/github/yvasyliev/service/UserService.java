@@ -1,4 +1,4 @@
-package com.github.yvasyliev.service.auth;
+package com.github.yvasyliev.service;
 
 import com.github.yvasyliev.model.dto.SignUpForm;
 import com.github.yvasyliev.model.entity.token.Token;
@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class AuthenticationService {
+public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 

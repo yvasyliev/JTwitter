@@ -1,7 +1,7 @@
 package com.github.yvasyliev.config.security;
 
-import com.github.yvasyliev.service.auth.JwtService;
-import com.github.yvasyliev.service.auth.TokenService;
+import com.github.yvasyliev.service.JwtService;
+import com.github.yvasyliev.service.TokenService;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

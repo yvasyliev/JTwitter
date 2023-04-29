@@ -8,8 +8,8 @@ import com.github.yvasyliev.model.dto.TokenDTO;
 import com.github.yvasyliev.model.dto.UpdateEmailForm;
 import com.github.yvasyliev.model.dto.UpdatePasswordForm;
 import com.github.yvasyliev.model.entity.user.User;
-import com.github.yvasyliev.service.auth.AuthenticationService;
-import com.github.yvasyliev.service.auth.TokenService;
+import com.github.yvasyliev.service.UserService;
+import com.github.yvasyliev.service.TokenService;
 import com.github.yvasyliev.uitls.RequestUtils;
 import com.github.yvasyliev.validation.SupportedImageFormat;
 import com.github.yvasyliev.validation.ValidEmailToken;
@@ -41,7 +41,7 @@ public class UserController {
     private static final String BEARER_PREFIX = "Bearer ";
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private UserService userService;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -51,7 +51,7 @@ public class UserController {
 
     @PostMapping
     public TokenDTO signUp(@Valid @RequestBody SignUpForm signupForm, HttpServletRequest request) throws ServletException {
-        var token = authenticationService.signUp(signupForm);
+        var token = userService.signUp(signupForm);
         request.login(signupForm.username(), signupForm.password());
         eventPublisher.publishEvent(new EmailChanged(RequestUtils.getHost(request), token.getUser()));
         return new TokenDTO(token.getId(), token.getExpiresAt());
@@ -59,7 +59,7 @@ public class UserController {
 
     @PostMapping("/email/confirm")
     public ResponseEntity<?> confirmEmail(@RequestParam @ValidEmailToken String tokenId) {
-        authenticationService.confirmEmail(tokenId);
+        userService.confirmEmail(tokenId);
         return ResponseEntity.noContent().build();
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     @PostMapping("/signOut")
     public ResponseEntity<?> signOut(HttpServletRequest request) {
         var jwt = request.getHeader(AUTHORIZATION).substring(BEARER_PREFIX.length());
-        authenticationService.signOut(jwt);
+        userService.signOut(jwt);
         return ResponseEntity.noContent().build();
     }
 
@@ -89,14 +89,14 @@ public class UserController {
     @PatchMapping("/email")
     public ResponseEntity<?> updateEmail(@RequestBody UpdateEmailForm updateEmailForm, HttpServletRequest request, Authentication authentication) {
         var user = (User) authentication.getPrincipal();
-        user = authenticationService.updateEmail(updateEmailForm.email(), user);
+        user = userService.updateEmail(updateEmailForm.email(), user);
         eventPublisher.publishEvent(new EmailChanged(RequestUtils.getHost(request), user));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordForm updatePasswordForm, HttpServletRequest request, Authentication authentication) {
-        var user = authenticationService.updatePassword(
+        var user = userService.updatePassword(
                 updatePasswordForm.newPassword(),
                 (User) authentication.getPrincipal()
         );
@@ -106,7 +106,7 @@ public class UserController {
 
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
-        authenticationService.setUserPhoto(photo, (User) authentication.getPrincipal());
+        userService.setUserPhoto(photo, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 }

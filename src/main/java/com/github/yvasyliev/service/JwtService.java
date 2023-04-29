@@ -1,4 +1,4 @@
-package com.github.yvasyliev.service.auth;
+package com.github.yvasyliev.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;

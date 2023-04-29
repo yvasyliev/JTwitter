@@ -3,7 +3,7 @@ package com.github.yvasyliev.events.listeners;
 import com.github.yvasyliev.events.PasswordChanged;
 import com.github.yvasyliev.events.EmailChanged;
 import com.github.yvasyliev.service.EmailSender;
-import com.github.yvasyliev.service.auth.TokenService;
+import com.github.yvasyliev.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
