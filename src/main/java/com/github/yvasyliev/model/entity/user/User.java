@@ -55,6 +55,9 @@ public class User implements UserDetails {
     @JoinTable(name = "tweet_likes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tweet_id"))
     private Set<Tweet> likedTweets;
 
+    @Column(nullable = false)
+    private String photo = "default_user_photo.png";
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -160,5 +163,13 @@ public class User implements UserDetails {
 
     public void setLikedTweets(Set<Tweet> likedTweets) {
         this.likedTweets = likedTweets;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

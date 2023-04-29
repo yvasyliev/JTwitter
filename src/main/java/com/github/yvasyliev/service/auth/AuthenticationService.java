@@ -7,8 +7,15 @@ import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class AuthenticationService {
@@ -20,6 +27,9 @@ public class AuthenticationService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Value("images/user/photo")
+    private String userPhotoDir;
 
     @Transactional
     public Token signUp(SignUpForm signupForm) {
@@ -54,5 +64,22 @@ public class AuthenticationService {
     public User updatePassword(String password, User user) {
         user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void setUserPhoto(MultipartFile photo, User user) throws IOException {
+        var filename = generateFilename(photo);
+        user.setPhoto(filename);
+        userRepository.save(user);
+        photo.transferTo(Paths.get(userPhotoDir, filename));
+    }
+
+    private String generateFilename(MultipartFile file) {
+        var contentType = Objects.requireNonNull(file.getContentType());
+        var extension = contentType.substring(contentType.indexOf('/') + 1);
+        return "%s.%s".formatted(
+                UUID.randomUUID().toString(),
+                extension
+        );
     }
 }

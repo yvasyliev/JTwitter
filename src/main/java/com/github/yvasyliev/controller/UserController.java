@@ -11,12 +11,14 @@ import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.auth.AuthenticationService;
 import com.github.yvasyliev.service.auth.TokenService;
 import com.github.yvasyliev.uitls.RequestUtils;
+import com.github.yvasyliev.validation.SupportedImageFormat;
 import com.github.yvasyliev.validation.ValidEmailToken;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -96,6 +101,12 @@ public class UserController {
                 (User) authentication.getPrincipal()
         );
         eventPublisher.publishEvent(new PasswordChanged(RequestUtils.getHost(request), user));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadUserPhoto(@RequestParam("photo") @SupportedImageFormat MultipartFile photo, Authentication authentication) throws IOException {
+        authenticationService.setUserPhoto(photo, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 }
