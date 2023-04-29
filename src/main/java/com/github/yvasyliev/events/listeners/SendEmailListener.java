@@ -28,7 +28,7 @@ public class SendEmailListener {
         var text = EMAIL_CONFIRMATION_TEMPLATE.formatted(
                 UriComponentsBuilder
                         .fromHttpUrl(emailChanged.host())
-                        .pathSegment("api", "v1", "auth", "confirm")
+                        .pathSegment("users", "email", "confirm")
                         .queryParam("token", emailToken.getId())
                         .toUriString()
         );
