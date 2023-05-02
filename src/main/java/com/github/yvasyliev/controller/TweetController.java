@@ -2,6 +2,7 @@ package com.github.yvasyliev.controller;
 
 import com.github.yvasyliev.model.dto.CreateTweetForm;
 import com.github.yvasyliev.model.dto.TweetDTO;
+import com.github.yvasyliev.model.dto.TweetPageDTO;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TweetService;
 import com.github.yvasyliev.validation.TweetExists;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -56,5 +58,11 @@ public class TweetController {
     public ResponseEntity<?> unlikeTweet(@PathVariable @TweetExists Long tweetId, Authentication authentication) {
         tweetService.unlikeTweet(tweetId, (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public TweetPageDTO getAllTweets(@RequestParam(defaultValue = "0") Integer page) {
+        var allTweets = tweetService.getAllTweets(page);
+        return new TweetPageDTO(allTweets.get(), allTweets.hasNext());
     }
 }

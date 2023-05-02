@@ -7,6 +7,10 @@ import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.repository.TweetRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +19,9 @@ import java.util.Optional;
 public class TweetService {
     @Autowired
     private TweetRepository tweetRepository;
+
+    @Value("10")
+    private int pageSize;
 
     @Transactional
     public Tweet createTweet(User user, CreateTweetForm createTweetForm) {
@@ -55,5 +62,10 @@ public class TweetService {
         var tweet = getById(tweetId);
         tweet.getLikes().remove(user);
         tweetRepository.save(tweet);
+    }
+
+    public Page<TweetDTO> getAllTweets(Integer page) {
+        var pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
+        return tweetRepository.findAllTweetDTOs(pageable);
     }
 }
