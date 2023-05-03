@@ -61,8 +61,10 @@ public class TweetController {
     }
 
     @GetMapping
-    public TweetPageDTO getAllTweets(@RequestParam(defaultValue = "0") Integer page) {
-        var allTweets = tweetService.getAllTweets(page);
+    public TweetPageDTO getAllTweets(@RequestParam(required = false) Long userId, @RequestParam(defaultValue = "0") Integer page) {
+        var allTweets = userId == null
+                ? tweetService.getAllTweets(page)
+                : tweetService.getAllTweetsByUserId(userId, page);
         return new TweetPageDTO(allTweets.get(), allTweets.hasNext());
     }
 }

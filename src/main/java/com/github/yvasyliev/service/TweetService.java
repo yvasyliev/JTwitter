@@ -68,4 +68,9 @@ public class TweetService {
         var pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
         return tweetRepository.findAllTweetDTOs(pageable);
     }
+
+    public Page<TweetDTO> getAllTweetsByUserId(Long userId, Integer page) {
+        var pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
+        return tweetRepository.findAllTweetDTOsByUserId(userId, pageable);
+    }
 }
