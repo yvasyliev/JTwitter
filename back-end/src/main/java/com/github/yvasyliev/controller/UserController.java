@@ -66,7 +66,7 @@ public class UserController {
 
     @PostMapping("/signIn")
     public TokenDTO signIn(@RequestBody SignInForm signInForm, HttpServletRequest request) throws ServletException {
-        request.login(signInForm.usernameOrEmail(), signInForm.password());
+        request.login(signInForm.login(), signInForm.password());
         var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var token = tokenService.createJwtToken((User) principal);
         return new TokenDTO(token.getId(), token.getExpiresAt());
