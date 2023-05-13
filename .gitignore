@@ -1,12 +1,2 @@
-# Project exclude paths
-target
-*.db
+*.iml
 .idea
-*.class
-
-images/*
-!images/user
-images/user/*
-!images/user/photo
-images/user/photo/*
-!images/user/photo/default_user_photo.png

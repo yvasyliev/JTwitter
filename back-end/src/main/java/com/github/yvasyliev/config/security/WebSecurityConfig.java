@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -28,9 +31,28 @@ public class WebSecurityConfig {
     @Autowired
     private Filter jwtFilter;
 
+    /**
+     * W/A to accept requests from {@code http://localhost:3000}.
+     *
+     * @return CORS configuration.
+     */
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(@NonNull CorsRegistry registry) {
+                registry
+                        .addMapping("/**")
+                        .allowedMethods("*")
+                        .allowedOrigins("http://localhost:3000");
+            }
+        };
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PathRequest.toH2Console())
