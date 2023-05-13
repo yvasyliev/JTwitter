@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage, { action as signIn } from './routes/LoginPage';
+import Root, { loader as getMe, action as logout } from './routes/Root';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <div>Hello World!</div>
+    index: true,
+    element: <Root />,
+    loader: getMe,
+    action: logout
   },
   {
     path: '/login',
