@@ -9,6 +9,7 @@ import com.github.yvasyliev.model.dto.UpdateEmailForm;
 import com.github.yvasyliev.model.dto.UpdateFirstNameForm;
 import com.github.yvasyliev.model.dto.UpdateLastNameForm;
 import com.github.yvasyliev.model.dto.UpdatePasswordForm;
+import com.github.yvasyliev.model.dto.UserDTO;
 import com.github.yvasyliev.model.entity.user.User;
 import com.github.yvasyliev.service.TokenService;
 import com.github.yvasyliev.service.UserService;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -121,5 +123,16 @@ public class UserController {
     public ResponseEntity<?> updateLastName(@RequestBody UpdateLastNameForm updateLastNameForm, Authentication authentication) {
         userService.updateLastName(updateLastNameForm.lastName(), (User) authentication.getPrincipal());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public UserDTO getMe(Authentication authentication) {
+        User me = (User) authentication.getPrincipal();
+        return new UserDTO(
+                me.getId(),
+                me.getUsername(),
+                me.getFirstName(),
+                me.getLastName()
+        );
     }
 }
