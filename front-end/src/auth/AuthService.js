@@ -44,6 +44,26 @@ class AuthService {
 
     return false;
   }
+
+  async register(user) {
+    const response = await fetch("http://localhost:8080/api/v1/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    });
+
+    const responseBody = await response.json();
+
+    if (response.ok) {
+      const { token, expiresAt } = responseBody;
+      localStorage.setItem("token", token);
+      localStorage.setItem("expiresAt", expiresAt);
+    } else {
+      throw new Error(JSON.stringify(responseBody));
+    }
+  }
 }
 
 const authService = new AuthService();
