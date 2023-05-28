@@ -1,9 +1,14 @@
 import LoginForm from '../components/LoginForm';
-import { redirect } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import authService from '../auth/AuthService';
 
 export default function LoginPage() {
-  return <LoginForm />
+  return (
+    <>
+      <LoginForm />
+      <Link to="/register">Or create an account.</Link>
+    </>
+  );
 }
 
 export async function action({ request }) {

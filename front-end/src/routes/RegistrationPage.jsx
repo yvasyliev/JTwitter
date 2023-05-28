@@ -1,9 +1,14 @@
 import RegistrationForm from '../components/RegistrationForm';
 import authService from '../auth/AuthService';
-import { redirect } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 
 export default function RegistrationPage() {
-  return <RegistrationForm />;
+  return (
+    <>
+      <RegistrationForm />
+      <Link to="/login">Or login.</Link>
+    </>
+  );
 }
 
 export async function action({ request }) {
