@@ -4,28 +4,30 @@ import authService from '../auth/AuthService';
 export default function Root() {
   const user = useLoaderData();
 
-  return <>
-    <nav>
-      <ol>
-        <li><Link to="/">Home</Link></li>
-        {user && <li><Link to={`/${user.username}`}>My Tweets</Link></li>}
-        {user && <li><Link to={`/${user.username}/settings`}>Settings</Link></li>}
-        {
-          user
-            ? (
-              <li>
-                <Form method="post">
-                  <button type="submit">Logout</button>
-                </Form>
-              </li>
-            ) : <li><Link to="/login">Login</Link></li>
-        }
-      </ol>
-    </nav>
-    <main>
-      <Outlet />
-    </main>
-  </>
+  return (
+    <>
+      <nav>
+        <ol>
+          <li><Link to="/">Home</Link></li>
+          {user && <li><Link to={`/${user.username}`}>My Tweets</Link></li>}
+          {user && <li><Link to={`/${user.username}/settings`}>Settings</Link></li>}
+          {
+            user
+              ? (
+                <li>
+                  <Form method="post">
+                    <button type="submit">Logout</button>
+                  </Form>
+                </li>
+              ) : <li><Link to="/login">Login</Link></li>
+          }
+        </ol>
+      </nav>
+      <main>
+        <Outlet />
+      </main>
+    </>
+  )
 }
 
 export async function loader() {

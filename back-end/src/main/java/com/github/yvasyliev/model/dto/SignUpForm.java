@@ -35,5 +35,6 @@ public record SignUpForm(
         String password,
 
         @NotEmpty
-        String confirmPassword) {
+        String confirmPassword
+) {
 }
