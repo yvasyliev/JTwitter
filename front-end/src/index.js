@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoginPage, { action as signIn } from './routes/LoginPage';
 import Root, { loader as getMe, action as logout } from './routes/Root';
 import RegistrationPage, { action as register } from './routes/RegistrationPage';
+import TweetsPage, { loader as fetchTweets } from './routes/TweetsPage';
 
 const router = createBrowserRouter([
   {
-    index: true,
+    index: '/',
     element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <TweetsPage />,
+        loader: fetchTweets
+      }
+    ],
     loader: getMe,
     action: logout
   },
