@@ -37,7 +37,11 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
                 Role.ADMIN
         ));
 
+
         tweetRepository.save(buildTweet(johnDoe, "Hello World!"));
+        for (var i = 1; i <= 50; i++) {
+            tweetRepository.save(buildTweet(johnDoe, "Tweet #" + i));
+        }
 
         userRepository.save(buildUser(
                 "user",
