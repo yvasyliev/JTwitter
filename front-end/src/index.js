@@ -10,6 +10,7 @@ import TweetsPage, { loader as fetchTweets } from './routes/TweetsPage';
 
 const router = createBrowserRouter([
   {
+    id: "root",
     index: '/',
     element: <Root />,
     children: [

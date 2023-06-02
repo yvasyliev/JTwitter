@@ -1,12 +1,19 @@
 import Tweets from '../components/Tweets';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useRouteLoaderData } from 'react-router-dom';
 import { useState } from 'react';
+import CreateTweetForm from '../components/CreateTweetForm';
 
 export default function TweetsPage() {
   const { tweets: initTweets, hasMoreTweets: initHasMoreTweets } = useLoaderData();
   const [ tweets, setTweets ] = useState(initTweets);
   const [ page, setPage ] = useState(1);
   const [ hasMoreTweets, setHasMoreTweets ] = useState(initHasMoreTweets);
+
+  const { username } = useRouteLoaderData("root") || {};
+
+  function onTweetCreated(newTweet) {
+    setTweets(prevTweets => [ newTweet, ...prevTweets ]);
+  }
 
   async function fetchMoreTweets() {
     const { tweets: moreTweets, hasMoreTweets: stillHasMoreTweets } = await fetchTweets(page);
@@ -17,6 +24,7 @@ export default function TweetsPage() {
 
   return (
     <div>
+      {username && <CreateTweetForm onTweetCreated={onTweetCreated} username={username} />}
       <Tweets tweets={tweets} />
       {hasMoreTweets && <button onClick={fetchMoreTweets}>Show more tweets.</button>}
     </div>
