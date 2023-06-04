@@ -67,4 +67,10 @@ public class TweetController {
                 : tweetService.getAllTweetsByUserId(userId, page);
         return new TweetPageDTO(allTweets.get(), allTweets.hasNext());
     }
+
+    @GetMapping("/{tweetId}/replies")
+    public TweetPageDTO getTweetReplies(@PathVariable @TweetExists Long tweetId, @RequestParam(defaultValue = "0") Integer page) {
+        var replies = tweetService.getTweetsByParent(tweetId, page);
+        return new TweetPageDTO(replies.get(), replies.hasNext());
+    }
 }

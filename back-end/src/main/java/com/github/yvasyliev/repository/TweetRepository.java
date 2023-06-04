@@ -76,4 +76,26 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
                 t.user.id = :userId"""
     )
     Page<TweetDTO> findAllTweetDTOsByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    @Query(value = """
+            select
+                new com.github.yvasyliev.model.dto.TweetDTO(
+                    t.id,
+                    t.text,
+                    t.createdAt,
+                    size(t.childTweets),
+                    size(t.likes),
+                    new com.github.yvasyliev.model.dto.UserDTO(
+                        t.user.id,
+                        t.user.username,
+                        t.user.firstName,
+                        t.user.lastName
+                    )
+                )
+            from
+                Tweet t
+            where
+                t.parentTweet.id = :parentTweetId"""
+    )
+    Page<TweetDTO> findTweetDTOsByParentTweetId(@Param("parentTweetId") Long parentTweetId, Pageable pageable);
 }
