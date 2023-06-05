@@ -40,7 +40,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
         tweetRepository.save(buildTweet(johnDoe, "Hello World!"));
         for (var i = 1; i <= 50; i++) {
-            tweetRepository.save(buildTweet(johnDoe, "Tweet #" + i));
+            var tweet = tweetRepository.save(buildTweet(johnDoe, "Tweet #" + i));
+            tweetRepository.save(buildTweet(johnDoe, "Reply to Tweet #" + i, tweet));
         }
 
         userRepository.save(buildUser(
@@ -69,6 +70,14 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         Tweet tweet = new Tweet();
         tweet.setUser(user);
         tweet.setText(text);
+        return tweet;
+    }
+
+    private Tweet buildTweet(User user, String text, Tweet parentTweet) {
+        Tweet tweet = new Tweet();
+        tweet.setUser(user);
+        tweet.setText(text);
+        tweet.setParentTweet(parentTweet);
         return tweet;
     }
 }

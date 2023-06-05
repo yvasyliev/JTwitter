@@ -7,6 +7,7 @@ import LoginPage, { action as signIn } from './routes/LoginPage';
 import Root, { loader as getMe, action as logout } from './routes/Root';
 import RegistrationPage, { action as register } from './routes/RegistrationPage';
 import TweetsPage, { loader as fetchTweets } from './routes/TweetsPage';
+import TweetPage, { loader as fetchTweetData } from './routes/TweetPage';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,11 @@ const router = createBrowserRouter([
         index: true,
         element: <TweetsPage />,
         loader: fetchTweets
+      },
+      {
+        path: ":username/tweets/:tweetId",
+        element: <TweetPage />,
+        loader: fetchTweetData
       }
     ],
     loader: getMe,
