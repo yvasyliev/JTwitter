@@ -1,26 +1,14 @@
 import { useLoaderData } from "react-router-dom";
 import Tweet from "../components/Tweet";
+import Tweets from "../components/Tweets";
 
 export default function TweetPage() {
   const { tweet, replies } = useLoaderData();
-  // console.log("tweetData", tweetData);
 
   return (
     <div>
-      <div>
-        <div>{`@${tweet.author.username}`}</div>
-        <div>{tweet.text}</div>
-        <div>{tweet.createdAt}</div>
-        <div>{tweet.replies}</div>
-        <div>{tweet.likes}</div>
-      </div>
-      <ul>
-        {replies.tweets.map((reply) => (
-          <li key={reply.id}>
-            <Tweet tweet={reply} />
-          </li>
-        ))}
-      </ul>
+      <Tweet tweet={tweet} />
+      <Tweets tweets={replies.tweets} />
     </div>
   );
 }
