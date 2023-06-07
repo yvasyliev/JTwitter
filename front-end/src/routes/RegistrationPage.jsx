@@ -1,5 +1,5 @@
 import RegistrationForm from '../components/RegistrationForm';
-import authService from '../auth/AuthService';
+import authService from '../service/AuthService';
 import { Link, redirect } from 'react-router-dom';
 
 export default function RegistrationPage() {

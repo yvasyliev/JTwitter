@@ -1,5 +1,5 @@
-import { Form, Link, Outlet, redirect, useLoaderData } from 'react-router-dom';
-import authService from '../auth/AuthService';
+import { Form, Link, Outlet, redirect, useLoaderData } from "react-router-dom";
+import authService from "../service/AuthService";
 
 export default function Root() {
   const user = useLoaderData();
@@ -8,34 +8,45 @@ export default function Root() {
     <>
       <nav>
         <ol>
-          <li><Link to="/">Home</Link></li>
-          {user && <li><Link to={`/${user.username}`}>My Tweets</Link></li>}
-          {user && <li><Link to={`/${user.username}/settings`}>Settings</Link></li>}
-          {
-            user
-              ? (
-                <li>
-                  <Form method="post">
-                    <button type="submit">Logout</button>
-                  </Form>
-                </li>
-              ) : <li><Link to="/login">Login</Link></li>
-          }
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          {user && (
+            <li>
+              <Link to={`/${user.username}`}>My Tweets</Link>
+            </li>
+          )}
+          {user && (
+            <li>
+              <Link to={`/${user.username}/settings`}>Settings</Link>
+            </li>
+          )}
+          {user ? (
+            <li>
+              <Form method="post">
+                <button type="submit">Logout</button>
+              </Form>
+            </li>
+          ) : (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
         </ol>
       </nav>
       <main>
         <Outlet />
       </main>
     </>
-  )
+  );
 }
 
 export async function loader() {
   if (authService.isLoggedIn()) {
     const response = await fetch("http://localhost:8080/api/v1/users", {
       headers: {
-        "Authorization": authService.authorization()
-      }
+        Authorization: authService.authorization(),
+      },
     });
 
     if (response.ok) {
@@ -47,6 +58,6 @@ export async function loader() {
 }
 
 export async function action() {
-  await authService.logout()
+  await authService.logout();
   return redirect("/");
 }
