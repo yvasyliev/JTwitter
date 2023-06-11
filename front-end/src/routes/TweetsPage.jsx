@@ -1,23 +1,12 @@
 import Tweets from "../components/Tweets";
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
 import tweetService from "../service/TweetService";
+import { useCallback } from "react";
 
 export default function TweetsPage() {
-  const { tweets, hasMoreTweets } = useLoaderData();
-
-  const { username } = useRouteLoaderData("root") || {};
-
-  return (
-    <div>
-      <Tweets
-        initTweets={tweets}
-        initHasMoreTweets={hasMoreTweets}
-        username={username}
-      />
-    </div>
+  const tweetsFetcher = useCallback(
+    async (page) => await tweetService.fetchTweets(page),
+    []
   );
-}
 
-export async function loader() {
-  return await tweetService.fetchTweets();
+  return <Tweets tweetsFetcher={tweetsFetcher} />;
 }

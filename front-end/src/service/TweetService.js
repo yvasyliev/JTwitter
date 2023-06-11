@@ -10,9 +10,10 @@ class TweetService {
     return this.#fetch(`http://localhost:8080/api/v1/tweets/${tweetId}`);
   }
 
-  async fetchReplies(tweetId) {
+  async fetchReplies(tweetId, page = 0) {
+    const params = new URLSearchParams({ page }).toString();
     return this.#fetch(
-      `http://localhost:8080/api/v1/tweets/${tweetId}/replies`
+      `http://localhost:8080/api/v1/tweets/${tweetId}/replies?${params}`
     );
   }
 
