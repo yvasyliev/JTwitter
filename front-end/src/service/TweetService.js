@@ -17,8 +17,8 @@ class TweetService {
     );
   }
 
-  async createTweet(text) {
-    const body = { text };
+  async createTweet(parentTweetId, text) {
+    const body = { parentTweetId, text };
     const response = await fetch("http://localhost:8080/api/v1/tweets", {
       method: "POST",
       headers: {

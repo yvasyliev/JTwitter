@@ -1,7 +1,11 @@
 import { useRef, useState } from "react";
 import tweetService from "../service/TweetService";
 
-export default function CreateTweetForm({ onTweetCreated, username }) {
+export default function CreateTweetForm({
+  onTweetCreated,
+  username,
+  parentTweetId,
+}) {
   const tweetText = useRef();
   const [createTweetError, setCreateTweetError] = useState(null);
 
@@ -9,7 +13,10 @@ export default function CreateTweetForm({ onTweetCreated, username }) {
     event.preventDefault();
 
     const { tweetId: id } =
-      (await tweetService.createTweet(tweetText.current.value)) || {};
+      (await tweetService.createTweet(
+        parentTweetId,
+        tweetText.current.value
+      )) || {};
 
     if (id) {
       onTweetCreated({

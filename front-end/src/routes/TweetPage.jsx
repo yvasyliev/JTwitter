@@ -14,7 +14,7 @@ export default function TweetPage() {
   return (
     <div>
       <Tweet tweet={tweet} />
-      <Tweets tweetsFetcher={tweetsFetcher} />
+      <Tweets tweetsFetcher={tweetsFetcher} parentTweetId={tweet.id} />
     </div>
   );
 }
