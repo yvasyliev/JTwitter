@@ -61,16 +61,20 @@ public class TweetController {
     }
 
     @GetMapping
-    public TweetPageDTO getAllTweets(@RequestParam(required = false) Long userId, @RequestParam(defaultValue = "0") Integer page) {
-        var allTweets = userId == null
-                ? tweetService.getAllTweets(page)
-                : tweetService.getAllTweetsByUserId(userId, page);
-        return new TweetPageDTO(allTweets.get(), allTweets.hasNext());
+    public TweetPageDTO getTweets(@RequestParam(defaultValue = "0") Integer page) {
+        var tweets = tweetService.getTweets(page);
+        return new TweetPageDTO(tweets.get(), tweets.hasNext());
     }
 
     @GetMapping("/{tweetId}/replies")
     public TweetPageDTO getTweetReplies(@PathVariable @TweetExists Long tweetId, @RequestParam(defaultValue = "0") Integer page) {
         var replies = tweetService.getTweetsByParent(tweetId, page);
         return new TweetPageDTO(replies.get(), replies.hasNext());
+    }
+
+    @GetMapping("/byUsername/{username}")
+    public TweetPageDTO getTweetsByUsername(@PathVariable String username, @RequestParam(defaultValue = "0") Integer page) {
+        var tweets = tweetService.getTweetsByUsername(username, page);
+        return new TweetPageDTO(tweets.get(), tweets.hasNext());
     }
 }

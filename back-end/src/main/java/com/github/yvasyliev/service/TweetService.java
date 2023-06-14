@@ -64,14 +64,14 @@ public class TweetService {
         tweetRepository.save(tweet);
     }
 
-    public Page<TweetDTO> getAllTweets(Integer page) {
+    public Page<TweetDTO> getTweets(Integer page) {
         var pageable = PageRequest.of(page, pageSize, Sort.by("id").descending());
-        return tweetRepository.findAllTweetDTOs(pageable);
+        return tweetRepository.findTweetDTOs(pageable);
     }
 
-    public Page<TweetDTO> getAllTweetsByUserId(Long userId, Integer page) {
+    public Page<TweetDTO> getTweetsByUsername(String username, Integer page) {
         var pageable = PageRequest.of(page, pageSize, Sort.by("id").descending());
-        return tweetRepository.findAllTweetDTOsByUserId(userId, pageable);
+        return tweetRepository.findTweetDTOsByUsername(username, pageable);
     }
 
     public Page<TweetDTO> getTweetsByParent(Long parentTweetId, Integer page) {

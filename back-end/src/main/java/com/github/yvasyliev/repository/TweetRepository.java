@@ -52,7 +52,7 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
             from
                 Tweet t"""
     )
-    Page<TweetDTO> findAllTweetDTOs(Pageable pageable);
+    Page<TweetDTO> findTweetDTOs(Pageable pageable);
 
 
     @Query(value = """
@@ -73,9 +73,9 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
             from
                 Tweet t
             where
-                t.user.id = :userId"""
+                t.user.username = :username"""
     )
-    Page<TweetDTO> findAllTweetDTOsByUserId(@Param("userId") Long userId, Pageable pageable);
+    Page<TweetDTO> findTweetDTOsByUsername(@Param("username") String username, Pageable pageable);
 
     @Query(value = """
             select
