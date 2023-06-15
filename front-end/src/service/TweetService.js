@@ -6,6 +6,13 @@ class TweetService {
     return this.#fetch(`http://localhost:8080/api/v1/tweets?${params}`);
   }
 
+  async fetchUserTweets(username, page = 0) {
+    const params = new URLSearchParams({ page }).toString();
+    return this.#fetch(
+      `http://localhost:8080/api/v1/tweets/byUsername/${username}?${params}`
+    );
+  }
+
   async fetchTweet(tweetId) {
     return this.#fetch(`http://localhost:8080/api/v1/tweets/${tweetId}`);
   }

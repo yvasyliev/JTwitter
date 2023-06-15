@@ -2,13 +2,17 @@ import useTweets from "../hooks/use-tweets";
 import CreateTweetForm from "./CreateTweetForm";
 import TweetLink from "./TweetLink";
 
-export default function Tweets({ tweetsFetcher, parentTweetId }) {
+export default function Tweets({
+  tweetsFetcher,
+  parentTweetId,
+  canAddTweet = true,
+}) {
   const [tweets, hasMoreTweets, fetchMoreTweets, username, addTweet] =
     useTweets(tweetsFetcher);
 
   return (
     <div>
-      {username && (
+      {canAddTweet && username && (
         <CreateTweetForm
           username={username}
           onTweetCreated={addTweet}

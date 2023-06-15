@@ -10,6 +10,7 @@ import RegistrationPage, {
 } from "./routes/RegistrationPage";
 import TweetsPage from "./routes/TweetsPage";
 import TweetPage, { loader as fetchTweetData } from "./routes/TweetPage";
+import UserPage from "./routes/UserPage";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <TweetsPage />,
+      },
+      {
+        path: ":username",
+        element: <UserPage />,
       },
       {
         path: ":username/tweets/:tweetId",
