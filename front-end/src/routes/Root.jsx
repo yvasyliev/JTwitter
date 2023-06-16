@@ -22,11 +22,16 @@ export default function Root() {
             </li>
           )}
           {user ? (
-            <li>
-              <Form method="post">
-                <button type="submit">Logout</button>
-              </Form>
-            </li>
+            <>
+              <li>
+                <Link to={`/${user.username}`}>My tweets</Link>
+              </li>
+              <li>
+                <Form method="post">
+                  <button type="submit">Logout</button>
+                </Form>
+              </li>
+            </>
           ) : (
             <li>
               <Link to="/login">Login</Link>
