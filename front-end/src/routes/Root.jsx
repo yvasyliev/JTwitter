@@ -27,6 +27,9 @@ export default function Root() {
                 <Link to={`/${user.username}`}>My tweets</Link>
               </li>
               <li>
+                <Link to={`/${user.username}/settings`}>Settings</Link>
+              </li>
+              <li>
                 <Form method="post">
                   <button type="submit">Logout</button>
                 </Form>

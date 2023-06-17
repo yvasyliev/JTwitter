@@ -11,6 +11,7 @@ import RegistrationPage, {
 import TweetsPage from "./routes/TweetsPage";
 import TweetPage, { loader as fetchTweetData } from "./routes/TweetPage";
 import UserPage from "./routes/UserPage";
+import UserSettingsPage from "./routes/UserSettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: ":username",
         element: <UserPage />,
+      },
+      {
+        path: ":username/settings",
+        element: <UserSettingsPage />,
       },
       {
         path: ":username/tweets/:tweetId",
