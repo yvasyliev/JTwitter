@@ -25,7 +25,9 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
                         t.user.id,
                         t.user.username,
                         t.user.firstName,
-                        t.user.lastName
+                        t.user.lastName,
+                        t.user.photo,
+                        null
                     )
                 )
             from
@@ -46,7 +48,9 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
                         t.user.id,
                         t.user.username,
                         t.user.firstName,
-                        t.user.lastName
+                        t.user.lastName,
+                        t.user.photo,
+                        null
                     )
                 )
             from
@@ -67,7 +71,9 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
                         t.user.id,
                         t.user.username,
                         t.user.firstName,
-                        t.user.lastName
+                        t.user.lastName,
+                        t.user.photo,
+                        null
                     )
                 )
             from
@@ -89,7 +95,9 @@ public interface TweetRepository extends JpaRepository<Tweet, Long> {
                         t.user.id,
                         t.user.username,
                         t.user.firstName,
-                        t.user.lastName
+                        t.user.lastName,
+                        t.user.photo,
+                        null
                     )
                 )
             from
