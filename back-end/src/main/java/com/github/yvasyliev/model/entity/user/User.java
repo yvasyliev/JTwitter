@@ -54,7 +54,7 @@ public class User implements UserDetails {
     private Set<Tweet> likedTweets;
 
     @Column(nullable = false)
-    private String photo = "default_user_photo.png";
+    private String photo = "images/user/photo/default_user_photo.png";
 
     @Override
     public boolean isAccountNonExpired() {
