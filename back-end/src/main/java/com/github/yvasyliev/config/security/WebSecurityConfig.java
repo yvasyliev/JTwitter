@@ -57,6 +57,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(PathRequest.toH2Console())
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users")
+                        .authenticated()
                         .requestMatchers(HttpMethod.GET)
                         .permitAll()
                         .requestMatchers(

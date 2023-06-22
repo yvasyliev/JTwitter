@@ -29,7 +29,12 @@ public interface TokenRepository extends JpaRepository<Token, String> {
 
     @Query("""
             select
-                true
+                case
+                    when count(t) > 0 then
+                        true
+                    else
+                        false
+                end
             from
                 Token t
             where

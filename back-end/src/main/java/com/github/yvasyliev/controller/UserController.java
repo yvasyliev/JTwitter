@@ -126,6 +126,19 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public UserDTO getCurrentUser(Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        return new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhoto(),
+                user.getEmail()
+        );
+    }
+
     @GetMapping("/getByUsername/{username}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String username, Authentication authentication) {
         return userService
