@@ -3,9 +3,9 @@ class AuthService {
     const response = await fetch("http://localhost:8080/api/v1/users/signIn", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(credentials)
+      body: JSON.stringify(credentials),
     });
 
     if (response.ok) {
@@ -32,8 +32,8 @@ class AuthService {
     const response = await fetch("http://localhost:8080/api/v1/users/signOut", {
       method: "POST",
       headers: {
-        "Authorization": this.authorization()
-      }
+        Authorization: this.authorization(),
+      },
     });
 
     if (response.ok) {
@@ -49,9 +49,9 @@ class AuthService {
     const response = await fetch("http://localhost:8080/api/v1/users", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     });
 
     const responseBody = await response.json();

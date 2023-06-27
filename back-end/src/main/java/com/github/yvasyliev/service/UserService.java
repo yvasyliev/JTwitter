@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     private TokenService tokenService;
 
-    @Value("images/user/photo")
+    @Value("${imagesFolder:back-end}/images/user/photo")
     private String userPhotoDir;
 
     @Transactional
