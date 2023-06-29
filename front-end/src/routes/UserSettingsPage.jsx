@@ -3,5 +3,10 @@ import UserPhotoForm from "../components/UserPhotoForm";
 
 export default function UserSettingsPage() {
   const user = useRouteLoaderData("root");
-  return <UserPhotoForm currentPhoto={user.photo} />;
+  return (
+    <>
+      <UserPhotoForm currentPhoto={user.photo} />
+      <input type="text" placeholder="First Name" />
+    </>
+  );
 }
