@@ -1,6 +1,8 @@
+import { backendDomain } from "./global-config";
+
 class AuthService {
   async login(credentials) {
-    const response = await fetch("http://localhost:8080/api/v1/users/signIn", {
+    const response = await fetch(`${backendDomain}/api/v1/users/signIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +31,7 @@ class AuthService {
   }
 
   async logout() {
-    const response = await fetch("http://localhost:8080/api/v1/users/signOut", {
+    const response = await fetch(`${backendDomain}/api/v1/users/signOut`, {
       method: "POST",
       headers: {
         Authorization: this.authorization(),
@@ -46,7 +48,7 @@ class AuthService {
   }
 
   async register(user) {
-    const response = await fetch("http://localhost:8080/api/v1/users", {
+    const response = await fetch(`${backendDomain}/api/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
