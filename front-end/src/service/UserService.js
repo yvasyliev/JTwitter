@@ -1,8 +1,8 @@
-import { backendDomain } from "./global-config";
+import { host } from "./global-config";
 
-class AuthService {
+class UserService {
   async login(credentials) {
-    const response = await fetch(`${backendDomain}/api/v1/users/signIn`, {
+    const response = await fetch(`${host}/api/v1/users/signIn`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ class AuthService {
   }
 
   async logout() {
-    const response = await fetch(`${backendDomain}/api/v1/users/signOut`, {
+    const response = await fetch(`${host}/api/v1/users/signOut`, {
       method: "POST",
       headers: {
         Authorization: this.authorization(),
@@ -48,7 +48,7 @@ class AuthService {
   }
 
   async register(user) {
-    const response = await fetch(`${backendDomain}/api/v1/users`, {
+    const response = await fetch(`${host}/api/v1/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,8 +66,23 @@ class AuthService {
       throw new Error(JSON.stringify(responseBody));
     }
   }
+
+  async setUserPhoto(photo) {
+    const formData = new FormData();
+    formData.append("photo", photo);
+
+    const response = await fetch(`${host}/api/v1/users/photo`, {
+      method: "PATCH",
+      headers: {
+        Authorization: this.authorization(),
+      },
+      body: formData,
+    });
+
+    return response.ok;
+  }
 }
 
-const authService = new AuthService();
+const userService = new UserService();
 
-export default authService;
+export default userService;
