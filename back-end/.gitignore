@@ -10,3 +10,4 @@ back-end/images/user/*
 !back-end/images/user/photo
 back-end/images/user/photo/*
 !back-end/images/user/photo/default_user_photo.png
+/images/user/photo
